@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from "react-router";
+import { AnimatePresence } from "motion/react";
+import { Navigate, Route, Routes, useLocation } from "react-router";
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
 import { useAuth } from "./features/auth/context/AuthContext";
@@ -26,51 +27,54 @@ function AuthenticatedRoutes({ isAuthenticated, children, userRole }) {
 
 function App() {
   const { isAuthenticated, role } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="bg-[#030712] min-h-screen text-[#F3F4F6]">
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <AuthenticatedRoutes
-              isAuthenticated={isAuthenticated}
-              userRole={role}
-            >
-              <LoginPage />
-            </AuthenticatedRoutes>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <AuthenticatedRoutes
-              isAuthenticated={isAuthenticated}
-              userRole={role}
-            >
-              <RegisterPage />
-            </AuthenticatedRoutes>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoutes isAuthenticated={isAuthenticated}>
-              <div>Home Page</div>
-            </ProtectedRoutes>
-          }
-        />
-        <Route path="/dashboard">
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
           <Route
-            path="fingerprint-uplaod"
+            path="/login"
+            element={
+              <AuthenticatedRoutes
+                isAuthenticated={isAuthenticated}
+                userRole={role}
+              >
+                <LoginPage />
+              </AuthenticatedRoutes>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <AuthenticatedRoutes
+                isAuthenticated={isAuthenticated}
+                userRole={role}
+              >
+                <RegisterPage />
+              </AuthenticatedRoutes>
+            }
+          />
+          <Route
+            path="/"
             element={
               <ProtectedRoutes isAuthenticated={isAuthenticated}>
-                <FingerprintUploadPage />
+                <div>Home Page</div>
               </ProtectedRoutes>
             }
           />
-        </Route>
-      </Routes>
+          <Route path="/dashboard">
+            <Route
+              path="fingerprint-uplaod"
+              element={
+                <ProtectedRoutes isAuthenticated={isAuthenticated}>
+                  <FingerprintUploadPage />
+                </ProtectedRoutes>
+              }
+            />
+          </Route>
+        </Routes>
+      </AnimatePresence>
     </div>
   );
 }
