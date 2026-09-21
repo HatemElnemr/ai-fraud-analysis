@@ -26,8 +26,21 @@ function AuthenticatedRoutes({ isAuthenticated, children, userRole }) {
 }
 
 function App() {
-  const { isAuthenticated, role } = useAuth();
+  const { isAuthenticated, role, loading } = useAuth();
   const location = useLocation();
+
+  // Wait for the Supabase session to be restored before rendering routes.
+  // Without this, a page refresh starts with isAuthenticated=false and the
+  // route guards redirect to /login before the session resolves.
+  if (loading) {
+    return (
+      <div className="bg-[#030712] min-h-screen text-[#F3F4F6] flex items-center justify-center">
+        <span className="font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase text-[#00F0FF]">
+          Loading...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#030712] min-h-screen text-[#F3F4F6]">
