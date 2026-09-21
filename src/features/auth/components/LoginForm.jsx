@@ -74,7 +74,7 @@ function LoginForm() {
       return;
     }
 
-    navigate("/dashboard/fingerprint-uplaod");
+    navigate("/dashboard/fingerprint-upload");
   };
 
   return (
