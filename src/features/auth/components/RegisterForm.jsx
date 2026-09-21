@@ -1,9 +1,10 @@
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import logo from "/assets/logo.png";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../../../shared/utils/supabase";
+import { registerSchema } from "../schemas/registerSchema";
 
 function RegisterForm() {
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
@@ -17,7 +18,8 @@ function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
 
   function togglePasswordVisibility() {
@@ -29,59 +31,75 @@ function RegisterForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({ ...prevForm, [name]: value }));
+    const updatedForm = { ...formData, [name]: value };
+    setFormData(updatedForm);
+
+    // Clear any form-level (server) error while the user edits.
+    setFormError("");
+
+    const result = registerSchema.safeParse(updatedForm);
+
+    const getFieldError = (field) =>
+      result.success
+        ? ""
+        : (result.error.issues.find((issue) => issue.path[0] === field)
+            ?.message ?? "");
+
+    setErrors((prev) => {
+      const nextErrors = { ...prev, [name]: getFieldError(name) };
+
+      // The confirm-password check depends on the password value, so
+      // revalidate it whenever the password changes — but only if the
+      // user has already interacted with the field, to avoid showing
+      // "Confirm Password is required" before they reach it.
+      if (
+        name === "password" &&
+        (updatedForm.confirmPassword !== "" || prev.confirmPassword)
+      ) {
+        nextErrors.confirmPassword = getFieldError("confirmPassword");
+      }
+
+      return nextErrors;
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
 
-    const { displayName, email, password, confirmPassword } = formData;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setFormError("");
 
-    if (displayName.trim() === "") {
-      setErrorMessage("Full Name is required.");
+    const result = registerSchema.safeParse(formData);
+
+    if (!result.success) {
+      // Surface every invalid field at once (first message per field).
+      const fieldErrors = {};
+      for (const issue of result.error.issues) {
+        const field = issue.path[0];
+        if (field && !fieldErrors[field]) {
+          fieldErrors[field] = issue.message;
+        }
+      }
+
+      setErrors(fieldErrors);
       return;
     }
-    if (email.trim() === "") {
-      setErrorMessage("Email Address is required.");
-      return;
-    }
-    if (!emailRegex.test(email)) {
-      setErrorMessage("Please enter a valid email address.");
-      return;
-    }
-    if (password.trim() === "") {
-      setErrorMessage("Password is required.");
-      return;
-    }
-    if (password.trim().length < 6) {
-      setErrorMessage("Password must be at least 6 characters long.");
-      return;
-    }
-    if (confirmPassword.trim() === "") {
-      setErrorMessage("Confirm Password is required.");
-      return;
-    }
-    if (confirmPassword.trim() !== password.trim()) {
-      setErrorMessage("Passwords do not match.");
-      return;
-    }
+
+    setErrors({});
 
     setLoading(true);
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email: result.data.email,
+      password: result.data.password,
       options: {
         data: {
-          display_name: displayName,
+          display_name: result.data.displayName,
         },
       },
     });
 
     setLoading(false);
     if (error) {
-      setErrorMessage(error.message);
+      setFormError(error.message);
       return;
     }
 
@@ -122,7 +140,9 @@ function RegisterForm() {
               Full Name
             </label>
             <input
-              className="bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+              className={`bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                errors.displayName ? "border-red-500" : "border-[#00F0FF1F]"
+              }`}
               type="text"
               name="displayName"
               value={formData.displayName}
@@ -130,6 +150,9 @@ function RegisterForm() {
               required
               placeholder="John Doe"
             />
+            {errors.displayName && (
+              <p className="text-[#EF4444] text-[12px]">{errors.displayName}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -137,7 +160,9 @@ function RegisterForm() {
               Email Address
             </label>
             <input
-              className="bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+              className={`bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                errors.email ? "border-red-500" : "border-[#00F0FF1F]"
+              }`}
               type="email"
               name="email"
               value={formData.email}
@@ -145,6 +170,9 @@ function RegisterForm() {
               required
               placeholder="operator@agency.gov"
             />
+            {errors.email && (
+              <p className="text-[#EF4444] text-[12px]">{errors.email}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-[#6B7280] font-inter font-medium text-[10px] leading-3.75 uppercase tracking-[1.5px]">
@@ -152,7 +180,9 @@ function RegisterForm() {
             </label>
             <div className="relative ">
               <input
-                className="w-full bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+                className={`w-full bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                  errors.password ? "border-red-500" : "border-[#00F0FF1F]"
+                }`}
                 type={passwordIsVisible ? "text" : "password"}
                 name="password"
                 value={formData.password}
@@ -168,6 +198,9 @@ function RegisterForm() {
                 {passwordIsVisible ? <FaRegEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-[#EF4444] text-[12px]">{errors.password}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-[#6B7280] font-inter font-medium text-[10px] leading-3.75 uppercase tracking-[1.5px]">
@@ -175,7 +208,11 @@ function RegisterForm() {
             </label>
             <div className="relative ">
               <input
-                className="w-full bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+                className={`w-full bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                  errors.confirmPassword
+                    ? "border-red-500"
+                    : "border-[#00F0FF1F]"
+                }`}
                 type={confirmPasswordIsVisible ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
@@ -191,10 +228,27 @@ function RegisterForm() {
                 {confirmPasswordIsVisible ? <FaRegEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.confirmPassword && (
+              <p className="text-[#EF4444] text-[12px]">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
         </div>
-        <div className="text-[#EF4444] font-inter leading-5 text-[14px] ">
-          {errorMessage && <p>{errorMessage}</p>}
+        <div className="min-h-6 text-[#EF4444] font-inter leading-5 text-[14px]">
+          <AnimatePresence mode="wait">
+            {formError && (
+              <motion.p
+                key={formError}
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                {formError}
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
 
         <motion.button
@@ -206,6 +260,7 @@ function RegisterForm() {
         >
           {loading ? "Creating Account..." : "Create Account"}
         </motion.button>
+
         <div className="text-[#4B5563] font-inter leading-5 text-[14px] text-center">
           Already have access?{" "}
           <Link to="/login" className="text-[#00F0FF] hover:underline">

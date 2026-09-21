@@ -1,9 +1,10 @@
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import logo from "/assets/logo.png";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../../../shared/utils/supabase";
+import { loginSchema } from "../schemas/loginSchema";
 
 function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,13 +13,27 @@ function LoginForm() {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevForm) => ({ ...prevForm, [name]: value }));
+    const updatedForm = { ...formData, [name]: value };
+    setFormData(updatedForm);
+
+    // Clear any form-level (server) error while the user edits.
+    setErrorMessage("");
+
+    const result = loginSchema.safeParse(updatedForm);
+
+    const fieldError = result.success
+      ? ""
+      : (result.error.issues.find((issue) => issue.path[0] === name)?.message ??
+        "");
+
+    setErrors((prev) => ({ ...prev, [name]: fieldError }));
   };
 
   function toggleVisibility() {
@@ -29,25 +44,28 @@ function LoginForm() {
     e.preventDefault();
     setErrorMessage("");
 
-    const { email, password } = formData;
+    const result = loginSchema.safeParse(formData);
 
-    if (email.trim() === "") {
-      setErrorMessage("Email Address is required.");
+    if (!result.success) {
+      // Surface every invalid field at once (first message per field).
+      const fieldErrors = {};
+      for (const issue of result.error.issues) {
+        const field = issue.path[0];
+        if (field && !fieldErrors[field]) {
+          fieldErrors[field] = issue.message;
+        }
+      }
+
+      setErrors(fieldErrors);
       return;
     }
-    if (password.trim() === "") {
-      setErrorMessage("Password is required.");
-      return;
-    }
-    if (password.trim().length < 6) {
-      setErrorMessage("Password must be at least 6 characters long.");
-      return;
-    }
+
+    setErrors({});
 
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: result.data.email,
+      password: result.data.password,
     });
     setLoading(false);
 
@@ -93,7 +111,9 @@ function LoginForm() {
               Email Address
             </label>
             <input
-              className="bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+              className={`bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                errors.email ? "border-red-500" : "border-[#00F0FF1F]"
+              }`}
               type="email"
               name="email"
               required
@@ -101,6 +121,9 @@ function LoginForm() {
               value={formData.email}
               onChange={handleChange}
             />
+            {errors.email && (
+              <p className="text-[#EF4444] text-[12px]">{errors.email}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-[#6B7280] font-inter font-medium text-[10px] leading-3.75 uppercase tracking-[1.5px]">
@@ -108,7 +131,9 @@ function LoginForm() {
             </label>
             <div className="relative ">
               <input
-                className="w-full bg-[#080F1E] border border-[#00F0FF1F] px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF]"
+                className={`w-full bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                  errors.password ? "border-red-500" : "border-[#00F0FF1F]"
+                }`}
                 type={isVisible ? "text" : "password"}
                 name="password"
                 value={formData.password}
@@ -124,22 +149,36 @@ function LoginForm() {
                 {isVisible ? <FaRegEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-[#EF4444] text-[12px]">{errors.password}</p>
+            )}
           </div>
         </div>
-        <div className="text-[#EF4444] font-inter leading-5 text-[14px] ">
-          {errorMessage && <p>{errorMessage}</p>}
-        </div>
-
         <motion.button
           formNoValidate
           type="submit"
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="bg-[#00F0FF] my-6 font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase w-full py-3 cursor-pointer"
+          className="bg-[#00F0FF] mt-6 font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase w-full py-3 cursor-pointer"
         >
           {loading ? "Logging in..." : "Login"}
         </motion.button>
-        <div className="text-[#4B5563] font-inter leading-5 text-[14px] text-center">
+        <div className="text-[#EF4444] font-inter leading-5 text-[14px] mt-2">
+          <AnimatePresence mode="wait">
+            {errorMessage && (
+              <motion.p
+                key={errorMessage}
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                {errorMessage}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+        <div className="text-[#4B5563] mt-6 font-inter leading-5 text-[14px] text-center">
           You don't have an account?{" "}
           <Link to="/register" className="text-[#00F0FF] hover:underline">
             Register
