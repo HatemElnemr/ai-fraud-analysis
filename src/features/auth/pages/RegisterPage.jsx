@@ -1,5 +1,5 @@
-import BrandPanel from "../components/auth/BrandPanel";
-import RegisterForm from "../components/auth/RegisterForm";
+import BrandPanel from "../components/BrandPanel";
+import RegisterForm from "../components/RegisterForm";
 
 function RegisterPage() {
   return (

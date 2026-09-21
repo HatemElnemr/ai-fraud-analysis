@@ -1,5 +1,5 @@
-import BrandPanel from "../components/auth/BrandPanel";
-import LoginForm from "../components/auth/LoginForm";
+import BrandPanel from "../components/BrandPanel";
+import LoginForm from "../components/LoginForm";
 
 function LoginPage() {
   return (

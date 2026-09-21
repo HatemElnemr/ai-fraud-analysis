@@ -1,16 +1,14 @@
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import logo from "/assets/logo.png";
 import { useState } from "react";
-import { supabase } from "../../utils/supabase";
 import { Link, useNavigate } from "react-router";
-// import { useAuth } from "../../store/AuthContext";
+import { supabase } from "../../../shared/utils/supabase";
 
 function RegisterForm() {
   const [passwordIsVisible, setPasswordIsVisible] = useState(false);
   const [confirmPasswordIsVisible, setConfirmPasswordIsVisible] =
     useState(false);
   const navigate = useNavigate();
-  // const { role } = useAuth();
 
   const [formData, setFormData] = useState({
     displayName: "",
@@ -84,9 +82,9 @@ function RegisterForm() {
     if (error) {
       setErrorMessage(error.message);
       return;
-    } else {
-      navigate("/dashboard/fingerprint-uplaod");
     }
+
+    navigate("/dashboard/fingerprint-uplaod");
   };
 
   return (
@@ -199,7 +197,7 @@ function RegisterForm() {
         </button>
         <div className="text-[#4B5563] font-inter leading-5 text-[14px] text-center">
           Already have access?{" "}
-          <Link href="/login" className="text-[#00F0FF] hover:underline">
+          <Link to="/login" className="text-[#00F0FF] hover:underline">
             Login
           </Link>
         </div>

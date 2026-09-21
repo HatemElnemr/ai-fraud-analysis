@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../../shared/utils/supabase";
 
 const AuthContext = createContext();
 
@@ -14,12 +14,14 @@ export const AuthProvider = ({ children }) => {
       setRole(session?.user?.app_metadata?.role || "user");
       setLoading(false);
     });
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setRole(session?.user?.app_metadata?.role || "user");
     });
+
     return () => subscription.unsubscribe();
   }, []);
 

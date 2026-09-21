@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import logo from "/assets/logo.png";
-import { supabase } from "../../utils/supabase";
 import { Link, useNavigate } from "react-router";
-// import { useAuth } from "../../store/AuthContext";
+import { supabase } from "../../../shared/utils/supabase";
 
 function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
-  // const { role } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -44,8 +42,9 @@ function LoginForm() {
       setErrorMessage("Password must be at least 6 characters long.");
       return;
     }
+
     setLoading(true);
-    const { error } = supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -54,9 +53,9 @@ function LoginForm() {
     if (error) {
       setErrorMessage(error.message);
       return;
-    } else {
-      navigate("/dashboard/fingerprint-uplaod");
     }
+
+    navigate("/dashboard/fingerprint-uplaod");
   };
 
   return (
@@ -131,7 +130,7 @@ function LoginForm() {
         </button>
         <div className="text-[#4B5563] font-inter leading-5 text-[14px] text-center">
           You don't have an account?{" "}
-          <Link href="/register" className="text-[#00F0FF] hover:underline">
+          <Link to="/register" className="text-[#00F0FF] hover:underline">
             Register
           </Link>
         </div>

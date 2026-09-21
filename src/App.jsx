@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router";
-import LoginPage from "./pages/loginPage";
-import RegisterPage from "./pages/RegisterPage";
-import { useAuth } from "./store/AuthContext";
-import FingerprintUploadPage from "./pages/FingerprintUploadPage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import RegisterPage from "./features/auth/pages/RegisterPage";
+import { useAuth } from "./features/auth/context/AuthContext";
+import FingerprintUploadPage from "./features/fingerprint/pages/FingerprintUploadPage";
 
 function ProtectedRoutes({ isAuthenticated, children, userRole }) {
   if (!isAuthenticated) {
