@@ -7,7 +7,7 @@ import FingerprintUploadPage from "./features/fingerprint/pages/FingerprintUploa
 
 import { getDefaultRoute } from "./layouts/navConfig";
 import PlaceholderPage from "./shared/components/PlaceholderPage";
-import DashboardLayout from "./layouts/dashboardLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
 import { SignatureUploadPage } from "./features/signature/pages/SignatureUploadPage";
 import { StampUploadPage } from "./features/stamp/pages/StampUploadPage";
 
