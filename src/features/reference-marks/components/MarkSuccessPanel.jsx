@@ -54,7 +54,7 @@ export function MarkSuccessPanel({
           <div key={row.k} className="flex justify-between text-xs gap-2">
             <span className="text-[#4B5563] shrink-0">{row.k}</span>
             <span
-              className={`truncate ${
+              className={`truncate max-w-[65%] ${
                 row.k === "Type" || row.k === "Entity"
                   ? "text-[#5B89D4]"
                   : "text-[#DDE1EC]"

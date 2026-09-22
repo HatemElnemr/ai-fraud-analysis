@@ -10,7 +10,7 @@ export default function PlaceholderPage({ title, description }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="p-8"
+      className="p-4 sm:p-8"
     >
       <h2
         className="text-[#DDE1EC] text-xl font-bold uppercase tracking-[0.15em]"
