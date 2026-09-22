@@ -28,7 +28,7 @@ export default function Navbar({ onLogout }) {
     }`;
 
   return (
-    <nav className="relative z-20 border-b border-[rgba(0,240,255,0.09)] bg-[#13151F]/80 backdrop-blur-sm">
+    <nav className="sticky top-0 z-20 border-b border-[rgba(0,240,255,0.09)] bg-[#13151F]/80 backdrop-blur-sm">
       <div className="px-6 lg:px-10 py-4 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <button
