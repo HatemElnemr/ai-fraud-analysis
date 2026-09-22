@@ -338,7 +338,7 @@ function FingerprintUploadPage() {
                             </div>
                           </div>
                           <div className="text-center w-full px-2">
-                            <div className="text-[#DDE1EC] text-xs font-medium truncate max-w-[180px] mx-auto">
+                            <div className="text-[#DDE1EC] text-xs font-medium truncate max-w-45 mx-auto">
                               {file?.name}
                             </div>
                             <div
@@ -367,7 +367,7 @@ function FingerprintUploadPage() {
                         <div className="py-8 sm:py-12 flex flex-col items-center gap-3 sm:gap-4">
                           <FingerprintSVG
                             size={80}
-                            className="sm:w-[100px] sm:h-[100px]"
+                            className="sm:w-25 sm:h-25"
                           />
                           <div className="text-center px-4">
                             <div className="text-[#DDE1EC] text-xs font-medium">

@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import BrandPanel from "../components/BrandPanel";
 import RegisterForm from "../components/RegisterForm";
+import { GridBg } from "../../fingerprint/components/FormFields";
 
 function RegisterPage() {
   return (
@@ -11,6 +12,7 @@ function RegisterPage() {
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
     >
+      <GridBg />
       <BrandPanel paragraph="Create your operator account to access the identification system." />
       <RegisterForm />
     </motion.div>

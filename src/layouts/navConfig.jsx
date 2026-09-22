@@ -1,10 +1,11 @@
 import {
   FaFingerprint,
   FaUsers,
-  FaChartLine,
   FaFileAlt,
   FaCog,
+  FaPenNib,
 } from "react-icons/fa";
+import { FaStamp } from "react-icons/fa6";
 
 /**
  * Role-based navigation configuration.
@@ -20,9 +21,17 @@ export const NAV_LINKS_BY_ROLE = {
       path: "/dashboard/fingerprint-upload",
       icon: FaFingerprint,
     },
+    {
+      label: "Signature Upload",
+      path: "/dashboard/signature-upload",
+      icon: FaPenNib,
+    },
+    {
+      label: "Stamp Upload",
+      path: "/dashboard/stamp-upload",
+      icon: FaStamp,
+    },
     { label: "Users", path: "/dashboard/users", icon: FaUsers },
-    { label: "Analytics", path: "/dashboard/analytics", icon: FaChartLine },
-    { label: "Settings", path: "/dashboard/settings", icon: FaCog },
   ],
   user: [
     {

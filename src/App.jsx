@@ -4,9 +4,12 @@ import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
 import { useAuth } from "./features/auth/context/AuthContext";
 import FingerprintUploadPage from "./features/fingerprint/pages/FingerprintUploadPage";
-import DashboardLayout from "./layouts/DashboardLayout";
+
 import { getDefaultRoute } from "./layouts/navConfig";
 import PlaceholderPage from "./shared/components/PlaceholderPage";
+import DashboardLayout from "./layouts/dashboardLayout";
+import { SignatureUploadPage } from "./features/signature/pages/SignatureUploadPage";
+import { StampUploadPage } from "./features/stamp/pages/StampUploadPage";
 
 /** Requires authentication; otherwise redirects to /login. */
 function RequireAuth({ children }) {
@@ -92,7 +95,29 @@ function App() {
             <Route
               index
               path="fingerprint-upload"
-              element={<FingerprintUploadPage />}
+              element={
+                <RequireRole roles={["admin"]}>
+                  <FingerprintUploadPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              index
+              path="signature-upload"
+              element={
+                <RequireRole roles={["admin"]}>
+                  <SignatureUploadPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              index
+              path="stamp-upload"
+              element={
+                <RequireRole roles={["admin"]}>
+                  <StampUploadPage />
+                </RequireRole>
+              }
             />
 
             {/* Admin-only content */}
@@ -103,24 +128,6 @@ function App() {
                   <PlaceholderPage title="Users" />
                 </RequireRole>
               }
-            />
-            <Route
-              path="analytics"
-              element={
-                <RequireRole roles={["admin"]}>
-                  <PlaceholderPage title="Analytics" />
-                </RequireRole>
-              }
-            />
-
-            {/* Shared content */}
-            <Route
-              path="reports"
-              element={<PlaceholderPage title="My Reports" />}
-            />
-            <Route
-              path="settings"
-              element={<PlaceholderPage title="Settings" />}
             />
           </Route>
 

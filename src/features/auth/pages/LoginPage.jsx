@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import BrandPanel from "../components/BrandPanel";
 import LoginForm from "../components/LoginForm";
+import { GridBg } from "../../fingerprint/components/FormFields";
 
 function LoginPage() {
   return (
@@ -11,6 +12,7 @@ function LoginPage() {
       exit={{ opacity: 0, y: -12 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
     >
+      <GridBg />
       <BrandPanel paragraph="AI-powered forensic document analysis" />
       <LoginForm />
     </motion.div>
