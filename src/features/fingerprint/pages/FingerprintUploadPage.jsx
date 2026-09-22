@@ -150,17 +150,17 @@ function FingerprintUploadPage() {
               style={{ fontFamily: "JetBrains Mono, monospace" }}
             >
               Dashboard <FaChevronRight size={9} />{" "}
-              <span className="text-[#00F0FF]">Insert Record</span>
+              <span className="text-[#5B89D4]">Insert Record</span>
             </div>
 
             <div className="mb-6 sm:mb-8">
               <h2
-                className="text-[#F3F4F6] text-xl sm:text-2xl font-bold"
+                className="text-[#DDE1EC] text-xl sm:text-2xl font-bold"
                 style={{ fontFamily: "Orbitron, sans-serif" }}
               >
                 Insert Database Record
               </h2>
-              <p className="text-[#9CA3AF] mt-1 sm:mt-1.5 text-xs sm:text-sm">
+              <p className="text-[#8A92A6] mt-1 sm:mt-1.5 text-xs sm:text-sm">
                 Register a new subject and their biometric fingerprint data into
                 the system.
               </p>
@@ -168,20 +168,20 @@ function FingerprintUploadPage() {
 
             {/* Success state */}
             {submitted ? (
-              <div className="border border-[#00F0FF]/20 rounded bg-[#080f1e] p-6 sm:p-10 lg:p-12 flex flex-col items-center gap-6 text-center shadow-[0_0_60px_rgba(0,240,255,0.05)]">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/8 flex items-center justify-center">
-                  <FaCheck size={26} className="text-[#00F0FF]" />
+              <div className="border border-[#5B89D4]/20 rounded bg-[#1A1E2D] p-6 sm:p-10 lg:p-12 flex flex-col items-center gap-6 text-center shadow-[0_0_60px_rgba(0,240,255,0.05)]">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#5B89D4]/30 bg-[#5B89D4]/8 flex items-center justify-center">
+                  <FaCheck size={26} className="text-[#5B89D4]" />
                 </div>
                 <div>
                   <div
-                    className="text-[#F3F4F6] text-lg sm:text-xl font-bold mb-2"
+                    className="text-[#DDE1EC] text-lg sm:text-xl font-bold mb-2"
                     style={{ fontFamily: "Orbitron, sans-serif" }}
                   >
                     Record Inserted
                   </div>
-                  <p className="text-[#9CA3AF] text-xs sm:text-sm max-w-sm">
+                  <p className="text-[#8A92A6] text-xs sm:text-sm max-w-sm">
                     The biometric record for{" "}
-                    <span className="text-[#F3F4F6] font-medium">
+                    <span className="text-[#DDE1EC] font-medium">
                       {form.fullName}
                     </span>{" "}
                     has been committed to the database.
@@ -189,11 +189,11 @@ function FingerprintUploadPage() {
                 </div>
 
                 {/* Summary card */}
-                <div className="w-full max-w-sm bg-[#030712] border border-[rgba(0,240,255,0.1)] rounded p-4 sm:p-5 text-left flex flex-col gap-3">
+                <div className="w-full max-w-sm bg-[#13151F] border border-[rgba(0,240,255,0.1)] rounded p-4 sm:p-5 text-left flex flex-col gap-3">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-[#4B5563]">Record ID</span>
                     <span
-                      className="text-[#00F0FF] truncate max-w-[60%]"
+                      className="text-[#5B89D4] truncate max-w-[60%]"
                       style={{ fontFamily: "JetBrains Mono, monospace" }}
                     >
                       {form.recordId}
@@ -201,18 +201,18 @@ function FingerprintUploadPage() {
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-[#4B5563]">Subject</span>
-                    <span className="text-[#F3F4F6] truncate max-w-[60%] text-right">
+                    <span className="text-[#DDE1EC] truncate max-w-[60%] text-right">
                       {form.fullName}
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-[#4B5563]">Nationality</span>
-                    <span className="text-[#F3F4F6]">{form.nationality}</span>
+                    <span className="text-[#DDE1EC]">{form.nationality}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-[#4B5563]">Inserted at</span>
                     <span
-                      className="text-[#9CA3AF] text-[10px] sm:text-xs"
+                      className="text-[#8A92A6] text-[10px] sm:text-xs"
                       style={{ fontFamily: "JetBrains Mono, monospace" }}
                     >
                       {new Date().toLocaleString()}
@@ -237,7 +237,7 @@ function FingerprintUploadPage() {
                 {/* ── Left: form ── */}
                 <div className="lg:col-span-3 flex flex-col gap-4 sm:gap-6">
                   {/* Personal Information */}
-                  <div className="bg-[#080f1e] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
+                  <div className="bg-[#1A1E2D] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
                     <SectionHeading>Personal Information</SectionHeading>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
@@ -262,26 +262,26 @@ function FingerprintUploadPage() {
                   </div>
 
                   {/* Classification */}
-                  <div className="bg-[#080f1e] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
+                  <div className="bg-[#1A1E2D] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
                     <SectionHeading>Classification</SectionHeading>
                     <div className="flex flex-col gap-1.5">
                       <label
                         className="text-[#6B7280] text-[10px] uppercase tracking-[0.15em] flex items-center gap-1"
                         style={{ fontFamily: "JetBrains Mono, monospace" }}
                       >
-                        Record ID <span className="text-[#00F0FF]">*</span>
+                        Record ID <span className="text-[#5B89D4]">*</span>
                       </label>
                       <div className="relative">
                         <input
                           value={form.recordId}
                           onChange={(e) => set("recordId")(e.target.value)}
-                          className="w-full bg-[#030712] border border-[rgba(0,240,255,0.18)] rounded-sm pl-3 pr-16 py-2.5 sm:py-3 text-[#00F0FF] text-xs sm:text-sm focus:outline-none focus:border-[#00F0FF]/50 focus:ring-1 focus:ring-[#00F0FF]/10 transition-all"
+                          className="w-full bg-[#13151F] border border-[rgba(0,240,255,0.18)] rounded-sm pl-3 pr-16 py-2.5 sm:py-3 text-[#5B89D4] text-xs sm:text-sm focus:outline-none focus:border-[#5B89D4]/50 focus:ring-1 focus:ring-[#5B89D4]/10 transition-all"
                           style={{ fontFamily: "JetBrains Mono, monospace" }}
                         />
                         <button
                           type="button"
                           onClick={() => set("recordId")(generateRecordId())}
-                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] text-[#4B5563] hover:text-[#00F0FF] uppercase tracking-wider transition-colors px-1 py-1"
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] text-[#4B5563] hover:text-[#5B89D4] uppercase tracking-wider transition-colors px-1 py-1"
                           style={{ fontFamily: "JetBrains Mono, monospace" }}
                         >
                           Regen
@@ -296,10 +296,10 @@ function FingerprintUploadPage() {
                 {/* ── Right: fingerprint upload + submit ── */}
                 <div className="lg:col-span-2 flex flex-col gap-4 sm:gap-5">
                   {/* Fingerprint upload */}
-                  <div className="bg-[#080f1e] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
+                  <div className="bg-[#1A1E2D] border border-[rgba(0,240,255,0.08)] rounded p-4 sm:p-6">
                     <SectionHeading>
                       Fingerprint Image{" "}
-                      <span className="text-[#00F0FF]">*</span>
+                      <span className="text-[#5B89D4]">*</span>
                     </SectionHeading>
 
                     <div
@@ -314,10 +314,10 @@ function FingerprintUploadPage() {
                       }}
                       className={`relative border rounded transition-all duration-300 ${
                         dragOver
-                          ? "border-[#00F0FF] bg-[#00F0FF]/5 shadow-[0_0_30px_rgba(0,240,255,0.1)]"
+                          ? "border-[#5B89D4] bg-[#5B89D4]/5 shadow-[0_0_30px_rgba(0,240,255,0.1)]"
                           : preview
-                            ? "border-[rgba(0,240,255,0.25)] bg-[#030712]"
-                            : "border-dashed border-[rgba(0,240,255,0.14)] bg-[#030712] cursor-pointer hover:border-[rgba(0,240,255,0.3)]"
+                            ? "border-[rgba(0,240,255,0.25)] bg-[#13151F]"
+                            : "border-dashed border-[rgba(0,240,255,0.14)] bg-[#13151F] cursor-pointer hover:border-[rgba(0,240,255,0.3)]"
                       }`}
                     >
                       {preview ? (
@@ -329,7 +329,7 @@ function FingerprintUploadPage() {
                               className="w-28 h-28 sm:w-36 sm:h-36 object-cover rounded border border-[rgba(0,240,255,0.2)] grayscale"
                             />
                             <div
-                              className="absolute top-1.5 right-1.5 border border-[#00F0FF]/30 rounded px-1.5 py-0.5 text-[#00F0FF] text-[8px] bg-[#030712]/90"
+                              className="absolute top-1.5 right-1.5 border border-[#5B89D4]/30 rounded px-1.5 py-0.5 text-[#5B89D4] text-[8px] bg-[#13151F]/90"
                               style={{
                                 fontFamily: "JetBrains Mono, monospace",
                               }}
@@ -338,7 +338,7 @@ function FingerprintUploadPage() {
                             </div>
                           </div>
                           <div className="text-center w-full px-2">
-                            <div className="text-[#F3F4F6] text-xs font-medium truncate max-w-[180px] mx-auto">
+                            <div className="text-[#DDE1EC] text-xs font-medium truncate max-w-[180px] mx-auto">
                               {file?.name}
                             </div>
                             <div
@@ -358,7 +358,7 @@ function FingerprintUploadPage() {
                               e.stopPropagation();
                               clearFile();
                             }}
-                            className="text-xs text-[#4B5563] hover:text-[#9CA3AF] underline transition-colors"
+                            className="text-xs text-[#4B5563] hover:text-[#8A92A6] underline transition-colors"
                           >
                             Remove
                           </button>
@@ -370,7 +370,7 @@ function FingerprintUploadPage() {
                             className="sm:w-[100px] sm:h-[100px]"
                           />
                           <div className="text-center px-4">
-                            <div className="text-[#F3F4F6] text-xs font-medium">
+                            <div className="text-[#DDE1EC] text-xs font-medium">
                               Drop fingerprint image
                             </div>
                             <div className="text-[#6B7280] text-xs mt-0.5">
@@ -401,7 +401,7 @@ function FingerprintUploadPage() {
                   </div>
 
                   {/* Record preview */}
-                  <div className="bg-[#080f1e] border border-[rgba(0,240,255,0.07)] rounded p-4 sm:p-5">
+                  <div className="bg-[#1A1E2D] border border-[rgba(0,240,255,0.07)] rounded p-4 sm:p-5">
                     <div
                       className="text-[#6B7280] text-[9px] uppercase tracking-[0.2em] mb-3 sm:mb-4"
                       style={{ fontFamily: "JetBrains Mono, monospace" }}
@@ -439,10 +439,10 @@ function FingerprintUploadPage() {
                           <span
                             className={`text-right max-w-[60%] truncate ${
                               row.cyan
-                                ? "text-[#00F0FF]"
+                                ? "text-[#5B89D4]"
                                 : row.v === "—"
                                   ? "text-[#374151]"
-                                  : "text-[#9CA3AF]"
+                                  : "text-[#8A92A6]"
                             }`}
                             style={
                               row.mono
@@ -459,18 +459,18 @@ function FingerprintUploadPage() {
 
                   {/* Submit */}
                   {saving ? (
-                    <div className="border border-[rgba(0,240,255,0.12)] rounded bg-[#080f1e] py-5 flex flex-col items-center gap-4">
+                    <div className="border border-[rgba(0,240,255,0.12)] rounded bg-[#1A1E2D] py-5 flex flex-col items-center gap-4">
                       <FingerprintSVG size={80} scanning />
                       <div
-                        className="text-[#00F0FF] text-xs"
+                        className="text-[#5B89D4] text-xs"
                         style={{ fontFamily: "Orbitron, sans-serif" }}
                       >
                         Committing to Database…
                       </div>
                       <div className="w-3/4">
-                        <div className="h-px bg-[#0d1f3c] overflow-hidden">
+                        <div className="h-px bg-[#1E2436] overflow-hidden">
                           <motion.div
-                            className="h-full bg-[#00F0FF]"
+                            className="h-full bg-[#5B89D4]"
                             initial={{ width: "0%" }}
                             animate={{ width: "100%" }}
                             transition={{ duration: 2.2, ease: "easeInOut" }}

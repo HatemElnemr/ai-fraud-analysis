@@ -13,7 +13,7 @@ export default function PlaceholderPage({ title, description }) {
       className="p-8"
     >
       <h2
-        className="text-[#F3F4F6] text-xl font-bold uppercase tracking-[0.15em]"
+        className="text-[#DDE1EC] text-xl font-bold uppercase tracking-[0.15em]"
         style={{ fontFamily: "Orbitron, sans-serif" }}
       >
         {title}

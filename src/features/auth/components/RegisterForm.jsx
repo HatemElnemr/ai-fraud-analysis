@@ -115,7 +115,7 @@ function RegisterForm() {
     >
       <div className="sm:hidden w-93.75 flex gap-2.5 items-start">
         <img src={logo} alt="logo" width={24} height={24} />
-        <h1 className="text-[#F3F4F6] text-[16px] font-orbitron font-bold uppercase leading-6 tracking-[1.6px]">
+        <h1 className="text-[#DDE1EC] text-[16px] font-orbitron font-bold uppercase leading-6 tracking-[1.6px]">
           Docsense x pro
         </h1>
       </div>
@@ -127,10 +127,10 @@ function RegisterForm() {
         transition={{ delay: 0.1, duration: 0.35 }}
       >
         <div className="flex flex-col gap-1">
-          <h1 className="font-orbitron font-bold text-2xl leading-8 text-[#F3F4F6]">
+          <h1 className="font-orbitron font-bold text-2xl leading-8 text-[#DDE1EC]">
             Register Account
           </h1>
-          <p className="font-inter font-normal text-[14px] leading-5 text-[#9CA3AF]">
+          <p className="font-inter font-normal text-[14px] leading-5 text-[#8A92A6]">
             Create your operator credentials below.
           </p>
         </div>
@@ -140,8 +140,8 @@ function RegisterForm() {
               Full Name
             </label>
             <input
-              className={`bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
-                errors.displayName ? "border-red-500" : "border-[#00F0FF1F]"
+              className={`bg-[#1A1E2D] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#DDE1EC] outline-none focus:border-[#5B89D4] ${
+                errors.displayName ? "border-red-500" : "border-[#5B89D41F]"
               }`}
               type="text"
               name="displayName"
@@ -160,8 +160,8 @@ function RegisterForm() {
               Email Address
             </label>
             <input
-              className={`bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
-                errors.email ? "border-red-500" : "border-[#00F0FF1F]"
+              className={`bg-[#1A1E2D] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#DDE1EC] outline-none focus:border-[#5B89D4] ${
+                errors.email ? "border-red-500" : "border-[#5B89D41F]"
               }`}
               type="email"
               name="email"
@@ -180,8 +180,8 @@ function RegisterForm() {
             </label>
             <div className="relative ">
               <input
-                className={`w-full bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
-                  errors.password ? "border-red-500" : "border-[#00F0FF1F]"
+                className={`w-full bg-[#1A1E2D] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#DDE1EC] outline-none focus:border-[#5B89D4] ${
+                  errors.password ? "border-red-500" : "border-[#5B89D41F]"
                 }`}
                 type={passwordIsVisible ? "text" : "password"}
                 name="password"
@@ -208,10 +208,10 @@ function RegisterForm() {
             </label>
             <div className="relative ">
               <input
-                className={`w-full bg-[#080F1E] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#F3F4F6] outline-none focus:border-[#00F0FF] ${
+                className={`w-full bg-[#1A1E2D] border px-4 py-3 placeholder:text-[#374151] text-[14px] font-inter text-[#DDE1EC] outline-none focus:border-[#5B89D4] ${
                   errors.confirmPassword
                     ? "border-red-500"
-                    : "border-[#00F0FF1F]"
+                    : "border-[#5B89D41F]"
                 }`}
                 type={confirmPasswordIsVisible ? "text" : "password"}
                 name="confirmPassword"
@@ -256,14 +256,14 @@ function RegisterForm() {
           type="submit"
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="bg-[#00F0FF] my-6 font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase w-full py-3 cursor-pointer"
+          className="bg-[#5B89D4] my-6 font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase w-full py-3 cursor-pointer"
         >
           {loading ? "Creating Account..." : "Create Account"}
         </motion.button>
 
         <div className="text-[#4B5563] font-inter leading-5 text-[14px] text-center">
           Already have access?{" "}
-          <Link to="/login" className="text-[#00F0FF] hover:underline">
+          <Link to="/login" className="text-[#5B89D4] hover:underline">
             Login
           </Link>
         </div>

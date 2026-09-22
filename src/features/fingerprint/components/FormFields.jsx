@@ -19,9 +19,9 @@ export function GridBg() {
 export function SectionHeading({ children }) {
   return (
     <div className="flex items-center gap-2 mb-4">
-      <span className="w-1 h-3 bg-[#00F0FF] rounded-sm" />
+      <span className="w-1 h-3 bg-[#5B89D4] rounded-sm" />
       <h3
-        className="text-[#F3F4F6] text-[11px] uppercase tracking-[0.18em]"
+        className="text-[#DDE1EC] text-[11px] uppercase tracking-[0.18em]"
         style={{ fontFamily: "JetBrains Mono, monospace" }}
       >
         {children}
@@ -31,7 +31,7 @@ export function SectionHeading({ children }) {
 }
 
 const fieldBase =
-  "w-full bg-[#030712] border border-[rgba(0,240,255,0.18)] rounded-sm px-3 py-2.5 sm:py-3 text-[#F3F4F6] text-xs sm:text-sm placeholder:text-[#374151] focus:outline-none focus:border-[#00F0FF]/50 focus:ring-1 focus:ring-[#00F0FF]/10 transition-all";
+  "w-full bg-[#13151F] border border-[rgba(0,240,255,0.18)] rounded-sm px-3 py-2.5 sm:py-3 text-[#DDE1EC] text-xs sm:text-sm placeholder:text-[#374151] focus:outline-none focus:border-[#5B89D4]/50 focus:ring-1 focus:ring-[#5B89D4]/10 transition-all";
 
 function Label({ label, required }) {
   return (
@@ -39,7 +39,7 @@ function Label({ label, required }) {
       className="text-[#6B7280] text-[10px] uppercase tracking-[0.15em] flex items-center gap-1"
       style={{ fontFamily: "JetBrains Mono, monospace" }}
     >
-      {label} {required && <span className="text-[#00F0FF]">*</span>}
+      {label} {required && <span className="text-[#5B89D4]">*</span>}
     </label>
   );
 }
@@ -77,12 +77,12 @@ export function SelectField({ label, value, onChange, options, required }) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={`${fieldBase} appearance-none pr-8 cursor-pointer ${
-            value ? "text-[#F3F4F6]" : "text-[#374151]"
+            value ? "text-[#DDE1EC]" : "text-[#374151]"
           }`}
         >
           <option value="">Select…</option>
           {options.map((option) => (
-            <option key={option} value={option} className="text-[#F3F4F6]">
+            <option key={option} value={option} className="text-[#DDE1EC]">
               {option}
             </option>
           ))}
@@ -132,8 +132,8 @@ export function CyberBtn({
   const base =
     "font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase py-3 px-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed";
   const style = outline
-    ? "border border-[#00F0FF]/30 text-[#00F0FF] hover:bg-[#00F0FF]/8"
-    : "bg-[#00F0FF] text-[#030712]";
+    ? "border border-[#5B89D4]/30 text-[#5B89D4] hover:bg-[#5B89D4]/8"
+    : "bg-[#5B89D4] text-[#13151F]";
   return (
     <motion.button
       type="button"
@@ -164,14 +164,14 @@ export function FingerprintSVG({
     >
       <defs>
         <linearGradient id="fpGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00F0FF" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#00F0FF" stopOpacity="0.3" />
+          <stop offset="0%" stopColor="#5B89D4" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#5B89D4" stopOpacity="0.3" />
         </linearGradient>
         {scanning && (
           <linearGradient id="fpScan" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#00F0FF" stopOpacity="0" />
-            <stop offset="50%" stopColor="#00F0FF" stopOpacity="1" />
-            <stop offset="100%" stopColor="#00F0FF" stopOpacity="0" />
+            <stop offset="0%" stopColor="#5B89D4" stopOpacity="0" />
+            <stop offset="50%" stopColor="#5B89D4" stopOpacity="1" />
+            <stop offset="100%" stopColor="#5B89D4" stopOpacity="0" />
           </linearGradient>
         )}
       </defs>
@@ -209,7 +209,7 @@ export function FingerprintSVG({
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         />
       ) : (
-        <circle cx="50" cy="55" r="3" fill="#00F0FF" />
+        <circle cx="50" cy="55" r="3" fill="#5B89D4" />
       )}
     </svg>
   );

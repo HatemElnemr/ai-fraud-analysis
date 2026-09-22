@@ -50,8 +50,8 @@ function App() {
   // route guards redirect to /login before the session resolves.
   if (loading) {
     return (
-      <div className="bg-[#030712] min-h-screen text-[#F3F4F6] flex items-center justify-center">
-        <span className="font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase text-[#00F0FF]">
+      <div className="bg-[#13151F] min-h-screen text-[#DDE1EC] flex items-center justify-center">
+        <span className="font-orbitron font-bold text-[12px] leading-4 tracking-[1.8px] uppercase text-[#5B89D4]">
           Loading...
         </span>
       </div>
@@ -59,7 +59,7 @@ function App() {
   }
 
   return (
-    <div className="bg-[#030712] min-h-screen text-[#F3F4F6]">
+    <div className="bg-[#13151F] min-h-screen text-[#DDE1EC]">
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route

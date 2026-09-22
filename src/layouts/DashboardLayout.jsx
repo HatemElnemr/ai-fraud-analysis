@@ -25,7 +25,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030712] text-[#F3F4F6]">
+    <div className="min-h-screen bg-[#13151F] text-[#DDE1EC]">
       <Navbar onLogout={handleLogout} />
       <motion.main
         key={location.pathname}

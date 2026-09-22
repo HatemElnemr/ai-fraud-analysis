@@ -4,7 +4,7 @@ import logo from "/assets/logo.png";
 function BrandPanel({ paragraph }) {
   return (
     <motion.div
-      className="hidden sm:flex flex-1 flex-col justify-center items-center h-screen border-r border-[#00F0FF12]"
+      className="hidden sm:flex flex-1 flex-col justify-center items-center h-screen border-r border-[#5B89D412]"
       initial={{ opacity: 0, x: -24 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
@@ -19,10 +19,10 @@ function BrandPanel({ paragraph }) {
         transition={{ duration: 0.5, ease: "easeOut" }}
       />
       <div className="pt-8 flex flex-col justify-center items-center text-center">
-        <h1 className="text-[#F3F4F6] font-orbitron uppercase leading-9 text-[30px] font-bold tracking-[3.6px]">
+        <h1 className="text-[#DDE1EC] font-orbitron uppercase leading-9 text-[30px] font-bold tracking-[3.6px]">
           Docsense x pro{" "}
         </h1>
-        <p className="pt-3 text-[#9CA3AF] font-inter text-[12px] max-w-100 leading-4 tracking-[2.16px] font-normal uppercase">
+        <p className="pt-3 text-[#8A92A6] font-inter text-[12px] max-w-100 leading-4 tracking-[2.16px] font-normal uppercase">
           {paragraph}
         </p>
       </div>
