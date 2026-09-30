@@ -3,7 +3,7 @@ import {
   ErrorBanner,
   InputField,
   SectionHeading,
-} from "../../fingerprint/components/FormFields";
+} from "../../fingerprint/components/shared";
 import { ENTITY_TYPES, entityTypeLabel } from "../constants";
 
 /**

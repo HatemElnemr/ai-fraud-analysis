@@ -1,5 +1,5 @@
 import { FaCheck } from "react-icons/fa";
-import { CyberBtn } from "../../fingerprint/components/FormFields";
+import { CyberBtn } from "../../fingerprint/components/shared";
 import { entityTypeLabel } from "../constants";
 
 /** Post-submit confirmation screen with the persisted row summary. */

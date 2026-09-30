@@ -6,10 +6,12 @@ import { useAuth } from "./features/auth/context/AuthContext";
 import FingerprintUploadPage from "./features/fingerprint/pages/FingerprintUploadPage";
 
 import { getDefaultRoute } from "./layouts/navConfig";
-import PlaceholderPage from "./shared/components/PlaceholderPage";
+
 import DashboardLayout from "./layouts/DashboardLayout";
 import { SignatureUploadPage } from "./features/signature/pages/SignatureUploadPage";
 import { StampUploadPage } from "./features/stamp/pages/StampUploadPage";
+import FingerprintAnalysis from "./features/fingerprint/pages/FingerprintAnalysis";
+import Results from "./features/fingerprint/pages/Results";
 
 /** Requires authentication; otherwise redirects to /login. */
 function RequireAuth({ children }) {
@@ -119,16 +121,17 @@ function App() {
                 </RequireRole>
               }
             />
+            <Route
+              path="fingerprint-analysis"
+              element={<FingerprintAnalysis />}
+            />
+            {/* Reads the compare-fingerprint response from router state. */}
+            <Route
+              path="fingerprint-analysis/results"
+              element={<Results />}
+            />
 
             {/* Admin-only content */}
-            <Route
-              path="users"
-              element={
-                <RequireRole roles={["admin"]}>
-                  <PlaceholderPage title="Users" />
-                </RequireRole>
-              }
-            />
           </Route>
 
           {/* Root and unknown paths resolve to the role dashboard */}

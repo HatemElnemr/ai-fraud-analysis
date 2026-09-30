@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import { SectionHeading } from "../../fingerprint/components/FormFields";
+import { SectionHeading } from "../../fingerprint/components/shared";
 
 /**
  * Image upload card — drag & drop / click-to-browse picker with preview,

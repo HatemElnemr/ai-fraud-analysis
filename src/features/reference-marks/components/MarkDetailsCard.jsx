@@ -1,4 +1,4 @@
-import { InputField, SectionHeading } from "../../fingerprint/components/FormFields";
+import { InputField, SectionHeading } from "../../fingerprint/components/shared";
 
 /** "Reference Details" card holding the optional `label` field. */
 export function MarkDetailsCard({ label, onChange, placeholder }) {

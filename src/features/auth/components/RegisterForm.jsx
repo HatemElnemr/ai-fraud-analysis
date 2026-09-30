@@ -4,6 +4,7 @@ import logo from "/assets/logo-icon.svg";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../../../shared/utils/supabase";
+import { getDefaultRoute } from "../../../layouts/navConfig";
 import { registerSchema } from "../schemas/registerSchema";
 
 function RegisterForm() {
@@ -87,7 +88,7 @@ function RegisterForm() {
     setErrors({});
 
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: result.data.email,
       password: result.data.password,
       options: {
@@ -103,7 +104,18 @@ function RegisterForm() {
       return;
     }
 
-    navigate("/dashboard/fingerprint-upload");
+    // `session` is null when the project requires email confirmation — in
+    // that case there is nothing to sign into yet, so tell the user instead
+    // of bouncing them back to the login form with no explanation.
+    if (!data?.session) {
+      setFormError(
+        "Account created. Confirm your email, then sign in with your credentials.",
+      );
+      return;
+    }
+
+    const signedInRole = data?.user?.app_metadata?.role || "user";
+    navigate(getDefaultRoute(signedInRole), { replace: true });
   };
 
   return (
@@ -116,7 +128,7 @@ function RegisterForm() {
       <div className="lg:hidden w-full flex gap-2.5 items-start">
         <img src={logo} alt="logo" width={30} height={30} />
         <h1 className="text-[#DDE1EC] text-[16px] font-orbitron font-bold uppercase leading-6 tracking-[1.6px]">
-          Docsense x pro
+          Docsense x
         </h1>
       </div>
       <motion.form

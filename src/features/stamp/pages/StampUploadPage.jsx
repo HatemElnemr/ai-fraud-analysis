@@ -4,7 +4,7 @@ import {
   CyberBtn,
   ErrorBanner,
   GridBg,
-} from "../../fingerprint/components/FormFields";
+} from "../../fingerprint/components/shared";
 import { archiveReferenceMark } from "../../reference-marks/api";
 import { useEntityPicker } from "../../reference-marks/hooks/useEntityPicker";
 import {

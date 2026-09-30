@@ -4,6 +4,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import logo from "/assets/logo-icon.svg";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "../../../shared/utils/supabase";
+import { getDefaultRoute } from "../../../layouts/navConfig";
 import { loginSchema } from "../schemas/loginSchema";
 
 function LoginForm() {
@@ -63,7 +64,7 @@ function LoginForm() {
     setErrors({});
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: result.data.email,
       password: result.data.password,
     });
@@ -74,7 +75,10 @@ function LoginForm() {
       return;
     }
 
-    navigate("/dashboard/fingerprint-upload");
+    // Land on the route this role is actually allowed to see — the admin
+    // default would bounce non-admins through RequireRole on every login.
+    const signedInRole = data?.user?.app_metadata?.role || "user";
+    navigate(getDefaultRoute(signedInRole), { replace: true });
   };
 
   return (
@@ -87,7 +91,7 @@ function LoginForm() {
       <div className="lg:hidden w-full flex gap-2.5 items-start">
         <img src={logo} alt="logo" width={30} height={30} />
         <h1 className="text-[#DDE1EC] text-[16px] font-orbitron font-bold uppercase leading-6 tracking-[1.6px]">
-          Docsense x pro
+          Docsense x
         </h1>
       </div>
       <motion.form

@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import BrandPanel from "../components/BrandPanel";
 import RegisterForm from "../components/RegisterForm";
-import { GridBg } from "../../fingerprint/components/FormFields";
+import { GridBg } from "../../fingerprint/components/shared";
 
 function RegisterPage() {
   return (

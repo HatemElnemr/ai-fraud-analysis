@@ -35,8 +35,8 @@ export const NAV_LINKS_BY_ROLE = {
   ],
   user: [
     {
-      label: "Fingerprint Upload",
-      path: "/dashboard/fingerprint-upload",
+      label: "Fingerprint Analysis",
+      path: "/dashboard/fingerprint-analysis",
       icon: FaFingerprint,
     },
     { label: "My Reports", path: "/dashboard/reports", icon: FaFileAlt },
@@ -47,7 +47,7 @@ export const NAV_LINKS_BY_ROLE = {
 /** Where each role lands after login and when visiting "/". */
 export const DEFAULT_ROUTE_BY_ROLE = {
   admin: "/dashboard/fingerprint-upload",
-  user: "/dashboard/fingerprint-scan",
+  user: "/dashboard/fingerprint-analysis",
 };
 
 /** Fallback role used when no authenticated role is available yet. */
