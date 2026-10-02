@@ -10,6 +10,11 @@ export function EntryPreview({ typeLabel, entityInfo, label, fileName }) {
       v: entityInfo ? entityTypeLabel(entityInfo.entity_type) : "—",
       cyan: false,
     },
+    // The entities.authority column — only surfaced when it has a value
+    // (the stamp registry's organizations; persons have none).
+    ...(entityInfo?.authority
+      ? [{ k: "Authority", v: entityInfo.authority, cyan: false }]
+      : []),
     { k: "Label", v: label || "—", cyan: false },
     { k: "Image", v: fileName || "—", cyan: false },
   ];

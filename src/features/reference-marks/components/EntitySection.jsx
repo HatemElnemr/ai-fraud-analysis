@@ -9,11 +9,22 @@ import { ENTITY_TYPES, entityTypeLabel } from "../constants";
 /**
  * "Entity" card — the required link to an `entities` row.
  *
- * Either typeahead-select an existing entity or create one inline
- * (name + person/organization type, matching the DB check constraint).
+ * Two modes by default: typeahead-select an existing entity, or create one
+ * inline (name + person/organization type, matching the DB check
+ * constraint). Pass `allowSelectExisting={false}` to hide the "Select
+ * Existing" option entirely — the stamp and signature registries then show
+ * only the inline creation form (the edit flow keeps both modes).
+ * `showAuthority` reveals the entity's `authority` column (stamp registry);
+ * the signature registry leaves it hidden.
  * Expects the object returned by `useEntityPicker`.
  */
-export function EntitySection({ picker, namePlaceholder }) {
+export function EntitySection({
+  picker,
+  namePlaceholder,
+  showAuthority = false,
+  authorityPlaceholder = "e.g. Ministry of Justice or Official Gazette",
+  allowSelectExisting = true,
+}) {
   const {
     entityId,
     entityInfo,
@@ -52,6 +63,14 @@ export function EntitySection({ picker, namePlaceholder }) {
             >
               {entityTypeLabel(entityInfo.entity_type)} · {entityId}
             </div>
+            {showAuthority && entityInfo.authority && (
+              <div
+                className="text-[#8A92A6] text-[9px] uppercase tracking-[0.15em] mt-0.5 truncate"
+                style={{ fontFamily: "JetBrains Mono, monospace" }}
+              >
+                Authority · {entityInfo.authority}
+              </div>
+            )}
           </div>
           <button
             type="button"
@@ -64,29 +83,31 @@ export function EntitySection({ picker, namePlaceholder }) {
         </div>
       ) : (
         <>
-          {/* Mode toggle */}
-          <div className="flex gap-2 mb-4">
-            {[
-              { k: "select", label: "Select Existing" },
-              { k: "create", label: "Create New" },
-            ].map((m) => (
-              <button
-                key={m.k}
-                type="button"
-                onClick={() => switchMode(m.k)}
-                className={`text-[9px] uppercase tracking-[0.15em] px-3 py-1.5 border rounded transition-colors ${
-                  mode === m.k
-                    ? "border-[#5B89D4]/60 bg-[#5B89D4]/10 text-[#5B89D4]"
-                    : "border-[rgba(91,137,212,0.15)] text-[#4B5563] hover:text-[#8A92A6]"
-                }`}
-                style={{ fontFamily: "JetBrains Mono, monospace" }}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
+          {/* Mode toggle — hidden when only inline creation is offered */}
+          {allowSelectExisting && (
+            <div className="flex gap-2 mb-4">
+              {[
+                { k: "select", label: "Select Existing" },
+                { k: "create", label: "Create New" },
+              ].map((m) => (
+                <button
+                  key={m.k}
+                  type="button"
+                  onClick={() => switchMode(m.k)}
+                  className={`text-[9px] uppercase tracking-[0.15em] px-3 py-1.5 border rounded transition-colors ${
+                    mode === m.k
+                      ? "border-[#5B89D4]/60 bg-[#5B89D4]/10 text-[#5B89D4]"
+                      : "border-[rgba(91,137,212,0.15)] text-[#4B5563] hover:text-[#8A92A6]"
+                  }`}
+                  style={{ fontFamily: "JetBrains Mono, monospace" }}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          )}
 
-          {mode === "select" ? (
+          {allowSelectExisting && mode === "select" ? (
             /* ── Existing-entity typeahead ── */
             <div className="flex flex-col gap-2">
               <InputField
@@ -125,8 +146,15 @@ export function EntitySection({ picker, namePlaceholder }) {
                       onClick={() => select(entity)}
                       className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left hover:bg-[#5B89D4]/5 transition-colors"
                     >
-                      <span className="text-[#DDE1EC] text-xs truncate">
-                        {entity.name}
+                      <span className="min-w-0">
+                        <span className="text-[#DDE1EC] text-xs truncate block">
+                          {entity.name}
+                        </span>
+                        {showAuthority && entity.authority && (
+                          <span className="text-[#4B5563] text-[10px] truncate block">
+                            {entity.authority}
+                          </span>
+                        )}
                       </span>
                       <span
                         className="text-[#5B89D4] text-[9px] uppercase shrink-0"
@@ -180,6 +208,16 @@ export function EntitySection({ picker, namePlaceholder }) {
                   ))}
                 </div>
               </div>
+              {showAuthority && (
+                <InputField
+                  label="Authority"
+                  placeholder={authorityPlaceholder}
+                  value={newEntity.authority}
+                  onChange={(v) =>
+                    setNewEntity((p) => ({ ...p, authority: v }))
+                  }
+                />
+              )}
               <div>
                 <CyberBtn
                   outline

@@ -170,6 +170,7 @@ export function SignatureUploadPage({ onNavigate }) {
                 <EntitySection
                   picker={picker}
                   namePlaceholder={PAGE.entityNamePlaceholder}
+                  allowSelectExisting={false}
                 />
                 <MarkDetailsCard
                   label={label}

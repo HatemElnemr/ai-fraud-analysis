@@ -15,6 +15,10 @@ export function MarkSuccessPanel({
     { k: "Type", v: typeLabel },
     { k: "Entity", v: entityInfo?.name || "—" },
     { k: "Entity Type", v: entityTypeLabel(entityInfo?.entity_type) },
+    // entities.authority — shown only when present (stamp registry).
+    ...(entityInfo?.authority
+      ? [{ k: "Authority", v: entityInfo.authority }]
+      : []),
     { k: "Label", v: label || "—" },
     { k: "Committed at", v: new Date().toLocaleString() },
   ];

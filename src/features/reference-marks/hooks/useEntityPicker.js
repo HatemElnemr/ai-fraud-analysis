@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 import { createEntity, searchEntities } from "../api";
 import { ENTITY_TYPES } from "../constants";
 
-const EMPTY_NEW_ENTITY = { name: "", entity_type: ENTITY_TYPES[0] };
+const EMPTY_NEW_ENTITY = { name: "", entity_type: ENTITY_TYPES[0], authority: "" };
 
 /**
  * State for the "Entity" section: resolved `entityId` (either selected
@@ -14,7 +14,7 @@ const EMPTY_NEW_ENTITY = { name: "", entity_type: ENTITY_TYPES[0] };
  */
 export function useEntityPicker() {
   const [entityId, setEntityId] = useState(null);
-  const [entityInfo, setEntityInfo] = useState(null); // { name, entity_type }
+  const [entityInfo, setEntityInfo] = useState(null); // { name, entity_type, authority }
   const [mode, setMode] = useState("select"); // "select" | "create"
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -65,7 +65,11 @@ export function useEntityPicker() {
 
   const select = (entity) => {
     setEntityId(entity.id);
-    setEntityInfo({ name: entity.name, entity_type: entity.entity_type });
+    setEntityInfo({
+      name: entity.name,
+      entity_type: entity.entity_type,
+      authority: entity.authority ?? null,
+    });
     setQuery("");
     setResults([]);
     setSearching(false);
@@ -99,9 +103,14 @@ export function useEntityPicker() {
       const entity = await createEntity({
         name,
         entity_type: newEntity.entity_type,
+        authority: newEntity.authority,
       });
       setEntityId(entity.id);
-      setEntityInfo({ name: entity.name, entity_type: entity.entity_type });
+      setEntityInfo({
+        name: entity.name,
+        entity_type: entity.entity_type,
+        authority: entity.authority ?? null,
+      });
       setNewEntity(EMPTY_NEW_ENTITY);
     } catch (error) {
       setCreateErr(

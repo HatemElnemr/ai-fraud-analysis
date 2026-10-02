@@ -10,6 +10,9 @@ import { getDefaultRoute } from "./layouts/navConfig";
 import DashboardLayout from "./layouts/DashboardLayout";
 import { SignatureUploadPage } from "./features/signature/pages/SignatureUploadPage";
 import { StampUploadPage } from "./features/stamp/pages/StampUploadPage";
+import { MarkEditPage } from "./features/reference-marks/pages/MarkEditPage";
+import { SignatureAnalysisPage } from "./features/signature/pages/SignatureAnalysisPage";
+import { StampAnalysisPage } from "./features/stamp/pages/StampAnalysisPage";
 import FingerprintAnalysis from "./features/fingerprint/pages/FingerprintAnalysis";
 import Results from "./features/fingerprint/pages/Results";
 
@@ -121,6 +124,15 @@ function App() {
                 </RequireRole>
               }
             />
+            {/* Verifies a mark's type before opening its edit form */}
+            <Route
+              path="mark-edit"
+              element={
+                <RequireRole roles={["admin"]}>
+                  <MarkEditPage />
+                </RequireRole>
+              }
+            />
             <Route
               path="fingerprint-analysis"
               element={<FingerprintAnalysis />}
@@ -130,8 +142,13 @@ function App() {
               path="fingerprint-analysis/results"
               element={<Results />}
             />
+            {/* form → scanning → results in place, via signature-stamp-match */}
+            <Route
+              path="signature-analysis"
+              element={<SignatureAnalysisPage />}
+            />
+            <Route path="stamp-analysis" element={<StampAnalysisPage />} />
 
-            {/* Admin-only content */}
           </Route>
 
           {/* Root and unknown paths resolve to the role dashboard */}

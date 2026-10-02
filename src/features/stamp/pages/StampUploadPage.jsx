@@ -162,6 +162,9 @@ export function StampUploadPage({ onNavigate }) {
                 <EntitySection
                   picker={picker}
                   namePlaceholder={PAGE.entityNamePlaceholder}
+                  showAuthority
+                  authorityPlaceholder="e.g. Ministry of Justice or Official Gazette"
+                  allowSelectExisting={false}
                 />
                 <MarkDetailsCard
                   label={label}
