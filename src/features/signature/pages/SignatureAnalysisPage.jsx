@@ -50,7 +50,6 @@ export function SignatureAnalysisPage() {
   const [run, setRun] = useState(null);
   const error = fileError || matchError;
   const isResults = step === "results" && result !== null && run !== null;
-  console.log("SIGNATURE_ANALYSIS", result);
 
   /** A newly picked file clears the previous attempt's error. */
   const handleSelect = (nextFile) => {
