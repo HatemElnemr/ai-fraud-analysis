@@ -39,7 +39,6 @@ export const NAV_LINKS_BY_ROLE = {
       path: "/dashboard/mark-edit",
       icon: FaEdit,
     },
-    { label: "Users", path: "/dashboard/users", icon: FaUsers },
   ],
   user: [
     {
@@ -57,8 +56,6 @@ export const NAV_LINKS_BY_ROLE = {
       path: STAMP_ANALYSIS_PATH,
       icon: FaStamp,
     },
-    { label: "My Reports", path: "/dashboard/reports", icon: FaFileAlt },
-    { label: "Settings", path: "/dashboard/settings", icon: FaCog },
   ],
 };
 
