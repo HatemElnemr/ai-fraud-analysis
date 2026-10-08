@@ -9,7 +9,7 @@ const BADGE_MAP = {
     label: "Added",
     color: "text-[#10B981] border-[#10B981]/25 bg-[#10B981]/10",
   },
-  Removal: {
+  Deletion: {
     label: "Removed",
     color: "text-red-400 border-red-400/25 bg-red-400/10",
   },
@@ -21,7 +21,7 @@ const BADGE_MAP = {
  */
 export function DiffBlock({ diff }) {
   const badge = BADGE_MAP[diff.category] ?? {
-    label: diff.category ?? "Changed",
+    label: diff.category ?? "Formatting",
     color: "text-[#8A92A6] border-[#8A92A6]/25 bg-[#8A92A6]/10",
   };
 
