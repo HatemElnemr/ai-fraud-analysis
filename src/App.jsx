@@ -16,7 +16,7 @@ import { StampAnalysisPage } from "./features/stamp/pages/StampAnalysisPage";
 import FingerprintAnalysis from "./features/fingerprint/pages/FingerprintAnalysis";
 import Results from "./features/fingerprint/pages/Results";
 import DocumentUploadPage from "./features/documents/pages/DocumentUploadPage";
-import DocumentAnalysisPage from "./features/documents/pages/DocumentAnalysispage";
+import DocumentAnalysisPage from "./features/documents/pages/DocumentAnalysisPage";
 
 /** Requires authentication; otherwise redirects to /login. */
 function RequireAuth({ children }) {
