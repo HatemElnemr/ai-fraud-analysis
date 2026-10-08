@@ -44,7 +44,7 @@ export default function Navbar({ onLogout }) {
               className="text-[#DDE1EC] text-sm font-medium tracking-[0.2em] uppercase"
               style={{ fontFamily: "Orbitron, sans-serif" }}
             >
-              DocSense X Pro
+              DocSense X
             </span>
           </button>
 

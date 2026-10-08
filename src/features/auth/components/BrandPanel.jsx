@@ -20,7 +20,7 @@ function BrandPanel({ paragraph }) {
       />
       <div className=" flex flex-col justify-center items-center text-center">
         <h1 className="text-[#DDE1EC] font-orbitron uppercase leading-9 text-[30px] font-bold tracking-[3.6px]">
-          Docsense x pro{" "}
+          Docsense x{" "}
         </h1>
         <p className="pt-3 text-[#8A92A6] font-inter text-[12px] max-w-100 leading-4 tracking-[2.16px] font-normal uppercase">
           {paragraph}

@@ -17,7 +17,6 @@ import FingerprintAnalysis from "./features/fingerprint/pages/FingerprintAnalysi
 import Results from "./features/fingerprint/pages/Results";
 import DocumentUploadPage from "./features/documents/pages/DocumentUploadPage";
 import DocumentAnalysisPage from "./features/documents/pages/DocumentAnalysispage";
-;
 
 /** Requires authentication; otherwise redirects to /login. */
 function RequireAuth({ children }) {
@@ -110,7 +109,6 @@ function App() {
               }
             />
             <Route
-              
               path="signature-upload"
               element={
                 <RequireRole roles={["admin"]}>
@@ -119,7 +117,6 @@ function App() {
               }
             />
             <Route
-              
               path="stamp-upload"
               element={
                 <RequireRole roles={["admin"]}>
@@ -128,7 +125,6 @@ function App() {
               }
             />
             <Route
-              
               path="document-upload"
               element={
                 <RequireRole roles={["admin"]}>
@@ -157,7 +153,10 @@ function App() {
               element={<SignatureAnalysisPage />}
             />
             <Route path="stamp-analysis" element={<StampAnalysisPage />} />
-            <Route path="document-analysis" element={<DocumentAnalysisPage />} />
+            <Route
+              path="document-analysis"
+              element={<DocumentAnalysisPage />}
+            />
           </Route>
 
           {/* Root and unknown paths resolve to the role dashboard */}
