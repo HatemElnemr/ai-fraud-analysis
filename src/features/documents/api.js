@@ -14,7 +14,9 @@ import {
 function assertFileSize(file) {
   if (file.size > MAX_FILE_BYTES) {
     const maxMb = Math.round(MAX_FILE_BYTES / (1024 * 1024));
-    throw new Error(`File is too large — the maximum allowed size is ${maxMb} MB.`);
+    throw new Error(
+      `File is too large — the maximum allowed size is ${maxMb} MB.`,
+    );
   }
 }
 
@@ -100,7 +102,9 @@ async function uploadToDocumentBucket(file, folder = "") {
 
   const { data } = supabase.storage.from(DOCUMENT_BUCKET).getPublicUrl(path);
   if (!data?.publicUrl) {
-    throw new Error("Could not resolve a public URL for the uploaded document.");
+    throw new Error(
+      "Could not resolve a public URL for the uploaded document.",
+    );
   }
 
   return { path, publicUrl: data.publicUrl };
@@ -110,7 +114,7 @@ async function uploadToDocumentBucket(file, folder = "") {
  * Full document storage flow:
  *   1. upload the file to `document-bucket`
  *   2. resolve its public URL
- *   3. insert the `documents` row (`title`, `file_type`, `context_text`,
+ *   3. insert the `documents` row (`title`, `file_type`, `content_text`,
  *      `document_url`)
  *
  * Returns the inserted row so the success panel can show the real id and
@@ -137,10 +141,10 @@ export async function uploadDocument({ title, file, contextText }) {
     .insert({
       title: trimmedTitle,
       file_type: file.type || null,
-      context_text: trimmedContext || null,
+      content_text: trimmedContext || null,
       document_url: publicUrl,
     })
-    .select("id, title, file_type, context_text, document_url, created_at")
+    .select("id, title, file_type, content_text, document_url, created_at")
     .single();
   if (error) {
     throw new Error(`Could not save the document: ${error.message}`);

@@ -15,7 +15,7 @@ const EMPTY_FORM = () => ({ title: "", contextText: "" });
 
 /**
  * Stores a new document: the file is staged in `document-bucket`, then a
- * `documents` row is inserted (`title`, `file_type`, `context_text`,
+ * `documents` row is inserted (`title`, `file_type`, `content_text`,
  * `document_url`).
  *
  * Form/file state lives here, the request lives in `useUploadDocument`,

@@ -1,6 +1,6 @@
 /**
  * "Document Details" card: the persisted metadata fields of the upload form
- * (`title` and the optional `context_text`). Kept in sync with the
+ * (`title` and the optional `content_text`). Kept in sync with the
  * `documents` table — no field here lacks a column.
  *
  * `form` is `{ title, contextText }`; `onPatch` merges partial updates.
