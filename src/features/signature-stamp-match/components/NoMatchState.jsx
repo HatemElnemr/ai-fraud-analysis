@@ -47,7 +47,9 @@ export function NoMatchState({
       <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
         <ScoreChip
           label="Confidence Score"
-          value={score === null || score === undefined ? "—" : `${score}%`}
+          value={
+            score === null || score === undefined ? "N/A" : `${score}%`
+          }
           accent
         />
         <ScoreChip

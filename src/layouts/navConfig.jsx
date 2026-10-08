@@ -1,14 +1,13 @@
 import {
   FaFingerprint,
-  FaUsers,
-  FaFileAlt,
-  FaCog,
   FaPenNib,
   FaEdit,
 } from "react-icons/fa";
 import { FaStamp } from "react-icons/fa6";
 import { ANALYSIS_PATH as SIGNATURE_ANALYSIS_PATH } from "../features/signature/constants";
 import { ANALYSIS_PATH as STAMP_ANALYSIS_PATH } from "../features/stamp/constants";
+import { MdDocumentScanner  } from "react-icons/md";
+import { IoDocumentText } from "react-icons/io5";
 
 /**
  * Role-based navigation configuration.
@@ -35,6 +34,11 @@ export const NAV_LINKS_BY_ROLE = {
       icon: FaStamp,
     },
     {
+      label: "Document Upload",
+      path: "/dashboard/document-upload",
+      icon: IoDocumentText ,
+    },
+    {
       label: "Edit Marks",
       path: "/dashboard/mark-edit",
       icon: FaEdit,
@@ -55,6 +59,11 @@ export const NAV_LINKS_BY_ROLE = {
       label: "Stamp Analysis",
       path: STAMP_ANALYSIS_PATH,
       icon: FaStamp,
+    },
+    {
+      label: "Document Analysis",
+      path: "/dashboard/document-analysis",
+      icon: MdDocumentScanner ,
     },
   ],
 };

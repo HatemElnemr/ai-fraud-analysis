@@ -15,6 +15,9 @@ import { SignatureAnalysisPage } from "./features/signature/pages/SignatureAnaly
 import { StampAnalysisPage } from "./features/stamp/pages/StampAnalysisPage";
 import FingerprintAnalysis from "./features/fingerprint/pages/FingerprintAnalysis";
 import Results from "./features/fingerprint/pages/Results";
+import DocumentUploadPage from "./features/documents/pages/DocumentUploadPage";
+import DocumentAnalysisPage from "./features/documents/pages/DocumentAnalysispage";
+;
 
 /** Requires authentication; otherwise redirects to /login. */
 function RequireAuth({ children }) {
@@ -107,7 +110,7 @@ function App() {
               }
             />
             <Route
-              index
+              
               path="signature-upload"
               element={
                 <RequireRole roles={["admin"]}>
@@ -116,11 +119,20 @@ function App() {
               }
             />
             <Route
-              index
+              
               path="stamp-upload"
               element={
                 <RequireRole roles={["admin"]}>
                   <StampUploadPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              
+              path="document-upload"
+              element={
+                <RequireRole roles={["admin"]}>
+                  <DocumentUploadPage />
                 </RequireRole>
               }
             />
@@ -138,17 +150,14 @@ function App() {
               element={<FingerprintAnalysis />}
             />
             {/* Reads the compare-fingerprint response from router state. */}
-            <Route
-              path="fingerprint-analysis/results"
-              element={<Results />}
-            />
+            <Route path="fingerprint-analysis/results" element={<Results />} />
             {/* form → scanning → results in place, via signature-stamp-match */}
             <Route
               path="signature-analysis"
               element={<SignatureAnalysisPage />}
             />
             <Route path="stamp-analysis" element={<StampAnalysisPage />} />
-
+            <Route path="document-analysis" element={<DocumentAnalysisPage />} />
           </Route>
 
           {/* Root and unknown paths resolve to the role dashboard */}

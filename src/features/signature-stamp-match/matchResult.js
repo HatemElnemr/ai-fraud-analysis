@@ -25,11 +25,11 @@ import { MATCH_THRESHOLD } from "./constants";
  *
  * Everything is read defensively: an unexpected payload degrades to
  * `status: "unknown"`, and the raw payload stays on `payload`. The metrics
- * grid is built from whatever the response actually carries — the documented
- * `metrics` array, the known fields (`markType`, `label`, entity type), plus
- * a sweep of any other scalar field the function starts returning — with the
- * expected measurement labels appended as `—` placeholders for what remains
- * unreported, so no data is ever dropped and nothing crashes.
+ * grid is built only from what the response actually carries — the
+ * documented `metrics` array, the known fields (`markType`, `label`, entity
+ * type), plus a sweep of any other scalar field the function starts
+ * returning. Labels the response never reported are omitted entirely (no
+ * `—` placeholders), so every tile that renders shows a real value.
  *
  * Returns `{ status, matched, score, metrics, archiveRecord, markType, label,
  * message, threshold, payload }`.
@@ -39,7 +39,7 @@ export function normalizeMatchResult(payload, { fallbackMetrics = [] } = {}) {
     status: "unknown",
     matched: null,
     score: null,
-    metrics: fallbackMetricRows(fallbackMetrics),
+    metrics: [],
     archiveRecord: null,
     markType: null,
     label: "",
@@ -209,8 +209,9 @@ function readDate(value) {
  *
  * Accepts the documented array of `{ k, v }` / `{ key, value }` / `{ label,
  * value }` rows, plain `"Name: value"` strings, or an object map
- * (`{ "Pen Pressure": "Heavy" }`). Anything else → null, leaving the other
- * sources in `buildMetrics` to fill the grid.
+ * (`{ "Pen Pressure": "Heavy" }`). Rows whose value can't be read are
+ * dropped, never rendered as an empty tile. Anything else → null, leaving
+ * the other sources in `buildMetrics` to fill the grid.
  */
 function readMetrics(value) {
   if (Array.isArray(value)) {
@@ -225,10 +226,8 @@ function readMetrics(value) {
       .map(([k, v]) => {
         const key = readString(k);
         if (!key) return null;
-        if (v && typeof v === "object") {
-          return { k: key, v: readString(v.v ?? v.value) ?? "—" };
-        }
-        return { k: key, v: readString(v) ?? (v === 0 ? "0" : "—") };
+        const rowValue = readMetricValue(v);
+        return rowValue ? { k: key, v: rowValue } : null;
       })
       .filter(Boolean);
     return rows.length > 0 ? rows : null;
@@ -237,15 +236,39 @@ function readMetrics(value) {
   return null;
 }
 
+/**
+ * One metric value → the string the grid should show, or `null` when there
+ * is nothing to show (missing, empty, or an unreadable type).
+ *
+ * Numbers keep their exact value (`0` → `"0"`), booleans read as Yes/No,
+ * and `{ v }` / `{ value }` wrappers are unwrapped — so a declared
+ * `ringGeometry: true` renders "Yes", never a blank tile.
+ */
+function readMetricValue(rawValue) {
+  const value =
+    rawValue && typeof rawValue === "object" && !Array.isArray(rawValue)
+      ? rawValue.v ?? rawValue.value
+      : rawValue;
+
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? String(value) : null;
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed || null;
+  }
+  return null;
+}
+
 /** One array entry → `{ k, v }`, or null when it carries no readable pair. */
 function normalizeMetricEntry(entry) {
   if (typeof entry === "string") {
     const separator = entry.indexOf(":");
     if (separator > 0) {
-      return {
-        k: entry.slice(0, separator).trim(),
-        v: entry.slice(separator + 1).trim(),
-      };
+      const k = entry.slice(0, separator).trim();
+      const v = entry.slice(separator + 1).trim();
+      return k && v ? { k, v } : null;
     }
     return null;
   }
@@ -257,18 +280,18 @@ function normalizeMetricEntry(entry) {
   );
   if (!k) return null;
 
-  const rawValue = entry.v ?? entry.value ?? entry.result ?? entry.reading;
-  const v =
-    rawValue && typeof rawValue === "object"
-      ? (readString(rawValue.v ?? rawValue.value) ?? "—")
-      : (readString(rawValue) ?? (rawValue === 0 ? "0" : "—"));
+  const v = readMetricValue(
+    entry.v ??
+      entry.value ??
+      entry.val ??
+      entry.result ??
+      entry.reading ??
+      entry.score ??
+      entry.measurement,
+  );
+  if (!v) return null;
 
   return { k, v };
-}
-
-/** The expected metric labels with no measured value → rendered as `—`. */
-function fallbackMetricRows(labels) {
-  return (labels ?? []).map((label) => ({ k: label, v: null }));
 }
 
 /**
@@ -318,69 +341,91 @@ function titleCase(value) {
 }
 
 /**
- * Builds the metrics grid as a **strict allowlist**. Only these labels ever
- * render — nothing else from the response may appear:
+ * Comparison form of a metric label: title-cased, then stripped of any
+ * parenthetical unit/qualifier — `Ink Density (%)`, `ink_density`, and
+ * "Ink Density" all collapse to `ink density`, so the same measurement
+ * dedupes across sources and a unit-suffixed response label still matches
+ * its configured counterpart.
+ */
+function compareLabel(value) {
+  return titleCase(value)
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * Builds the metrics grid **strictly from the response** — every tile that
+ * renders carries a value the function actually returned; nothing is
+ * invented and nothing renders empty:
  *
- *   • the expected measurements from `fallbackMetrics` (this feature's
- *     config — e.g. Stroke Consistency, Pen Pressure, Slant Angle, Loop
- *     Ratio, Stroke Count, Algorithm), each with the value the response
- *     reported or an honest `—` when it didn't
+ *   • the documented `metrics` payload (array of rows or object map) is
+ *     authoritative: all its rows render, whatever they are named — the
+ *     function may word a label differently from the config or suffix it
+ *     with a unit (`Ink Density (%)`)
  *   • the three response-derived rows: Mark Type, Record Label, Entity Type
+ *   • a sweep of other top-level payload scalars, restricted to this
+ *     feature's configured labels (`fallbackMetrics`), so a measurement sent
+ *     at the top level — `algorithm`, `inkDensity`, … — still surfaces while
+ *     junk (`status`, `imageUrl`, undocumented keys) stays out
  *
- * Sources are read in row order —
- *   1. the documented `metrics` payload (array of rows or object map),
- *      kept only when its key is on the allowlist
- *   2. explicit rows for the known response fields
- *   3. a sweep of other payload scalars (so a configured measurement sent
- *      at the top level — `algorithm`, `penPressure`, … — still surfaces);
- *      everything the allowlist rejects — `imageUrl`, `confidence`,
- *      `status`, undocumented keys — is dropped
- *   4. the expected measurement labels still unreported → `—` placeholders
+ * Labels the response never reported are simply omitted — the grid never
+ * shows a `—` placeholder for a measurement that doesn't exist.
  *
  * Keys are normalized before display and dedupe: `pen_pressure`,
- * `penPressure`, "pen pressure" → "Pen Pressure" (capitalized, spaced).
- * Excluded by design: the score (banner + threshold bar), `reasoning`
- * (reasoning card), and record/error objects (their own cards).
+ * `penPressure`, and "pen pressure" all become "Pen Pressure" (capitalized,
+ * spaced), and `Estimated Diameter (mm)` dedupes against `Estimated
+ * Diameter` so the same measurement never appears twice. Excluded by
+ * design: the score (banner + threshold bar), `reasoning` (reasoning card),
+ * and record/error objects (their own cards).
  */
 function buildMetrics(payload, archiveRecord, fallbackMetrics) {
   const rows = [];
   const seen = new Set();
 
-  // The allowlist: this feature's expected measurements + the fixed
-  // response-derived rows, compared case-insensitively after title-casing.
+  // The allowlist for the top-level sweep: this feature's expected
+  // measurements + the fixed response-derived rows, compared
+  // case-insensitively (and unit-suffix-free) after title-casing.
   const allowed = new Set(
     [...(fallbackMetrics ?? []), "Mark Type", "Record Label", "Entity Type"]
-      .map((label) => titleCase(label))
-      .filter(Boolean)
-      .map((label) => label.toLowerCase()),
+      .map((label) => compareLabel(label))
+      .filter(Boolean),
   );
 
   /**
    * Adds one `{ k, v }` row — after normalizing the key: `pen_pressure`,
    * `penPressure`, and "pen pressure" all become "Pen Pressure", so every
-   * grid title is capitalized with spaces (never underscores). Keys outside
-   * the allowlist are rejected, which is what keeps extra response data out
-   * of the grid; dedupe then works across the declared / derived /
-   * placeholder sources that may name the same metric differently.
+   * grid title is capitalized with spaces (never underscores).
+   *
+   * `requireAllowlist` (default true) is what keeps extra top-level
+   * response data out of the grid; the response's own `metrics` rows bypass
+   * it. Rows without a readable value are dropped, so the grid never
+   * renders an empty tile. Dedupe then works across the declared / derived
+   * / sweep sources that may name the same metric differently.
    */
-  const push = (rawKey, rawValue) => {
+  const push = (rawKey, rawValue, { requireAllowlist = true } = {}) => {
     if (rawKey === null || rawKey === undefined) return;
     const k = titleCase(rawKey);
-    if (!k || !allowed.has(k.toLowerCase())) return;
+    if (!k) return;
+    const key = compareLabel(k);
+    if (!key) return;
+    if (requireAllowlist && !allowed.has(key)) return;
     let v = rawValue;
     if (typeof v === "string") {
       v = v.trim();
       if (!v) return;
     }
     if (v === null || v === undefined) return;
-    const key = k.toLowerCase();
     if (seen.has(key)) return;
     seen.add(key);
     rows.push({ k, v: String(v) });
   };
 
-  // 1. Documented `metrics` payload.
-  for (const row of readMetrics(payload.metrics) ?? []) push(row.k, row.v);
+  // 1. Documented `metrics` payload — authoritative, bypasses the allowlist.
+  for (const row of readMetrics(payload.metrics) ?? []) {
+    push(row.k, row.v, { requireAllowlist: false });
+  }
 
   // 2. Known response fields.
   const markType = readString(payload.markType ?? payload.documentType);
@@ -396,7 +441,7 @@ function buildMetrics(payload, archiveRecord, fallbackMetrics) {
   if (label) push("Record Label", label);
   if (archiveRecord?.entityType) push("Entity Type", titleCase(archiveRecord.entityType));
 
-  // 3. Sweep every other scalar the function sends.
+  // 3. Sweep every other scalar the function sends (allowlist-checked).
   for (const key of Object.keys(payload)) {
     if (CONSUMED_METRIC_KEYS.has(key.toLowerCase())) continue;
     const value = payload[key];
@@ -407,19 +452,6 @@ function buildMetrics(payload, archiveRecord, fallbackMetrics) {
     } else {
       push(titleCase(key), value);
     }
-  }
-
-  // 4. Expected measurements still unreported → honest `—` placeholders.
-  //    Keys are normalized exactly like `push`'s so a declared
-  //    `stroke_consistency: "Uniform"` row marks `Stroke Consistency` as
-  //    already reported instead of duplicating it with a dash.
-  for (const label_ of fallbackMetrics ?? []) {
-    const k = titleCase(label_);
-    if (!k) continue;
-    const key = k.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    rows.push({ k, v: null });
   }
 
   return rows;

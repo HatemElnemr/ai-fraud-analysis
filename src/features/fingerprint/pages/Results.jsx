@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import { FiChevronRight } from "react-icons/fi";
 import { ANALYSIS_PATH } from "../constants";
 import { CyberBtn, GridBg } from "../components/shared";
+import { PrintButton } from "../../../shared/components/PrintButton";
 import {
   IdentityRecordCard,
   NoMatchState,
@@ -88,7 +89,7 @@ export function ResultsPage() {
         <main className="flex-1 p-4 sm:p-6 lg:p-10 relative z-10">
           <div className="max-w-6xl mx-auto">
             <Breadcrumb />
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-3xl mx-auto flex flex-col gap-4">
               <NoMatchState
                 score={result.score}
                 threshold={result.threshold}
@@ -97,6 +98,9 @@ export function ResultsPage() {
                 message={result.message}
                 onNewAnalysis={goAnalysis}
               />
+              {/* The verdict is printable too — the report shows score,
+                  threshold, timestamp and notes, never DB imagery. */}
+              <PrintButton />
             </div>
           </div>
         </main>
@@ -152,6 +156,8 @@ export function ResultsPage() {
               <CyberBtn onClick={goAnalysis} outline className="w-full">
                 New Analysis
               </CyberBtn>
+              {/* Screen-only: prints this result as a white report. */}
+              <PrintButton className="w-full" />
             </div>
           </div>
         </div>

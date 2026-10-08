@@ -1,5 +1,6 @@
 import { CyberBtn } from "../../fingerprint/components/shared";
 import { ReasoningCard } from "../../fingerprint/components/FingerprintResults";
+import { PrintButton } from "../../../shared/components/PrintButton";
 import { SIGNATURE_STAMP_MATCH_FUNCTION } from "../constants";
 import { ArchiveRecordCard } from "./ArchiveRecordCard";
 import { MatchStatusBanner } from "./MatchStatusBanner";
@@ -35,7 +36,7 @@ export function ResultsStep({
   // Below threshold → fingerprint-style "not found" panel, nothing else.
   if (result.status === "no-match") {
     return (
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto flex flex-col gap-4">
         <NoMatchState
           subject={config.markType}
           score={result.score}
@@ -46,6 +47,9 @@ export function ResultsStep({
           actionLabel={config.results.resetLabel}
           onNewAnalysis={onReset}
         />
+        {/* The verdict is printable too — the report shows it without the
+            closest record's identity fields (same rule as on screen). */}
+        <PrintButton />
       </div>
     );
   }
@@ -110,9 +114,12 @@ export function ResultsStep({
             </CyberBtn>
           )}
 
+          {/* Screen-only: prints this result as a white report. */}
+
           <CyberBtn onClick={onReset} outline className="w-full">
             {config.results.resetLabel}
           </CyberBtn>
+          <PrintButton className="w-full" />
         </div>
       </div>
     </>

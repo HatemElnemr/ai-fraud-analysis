@@ -30,3 +30,112 @@ body::-webkit-scrollbar,
 *::-webkit-scrollbar {
   display: none;
 }
+
+/* ───────────────────────────── Print ─────────────────────────────
+   Results print as a clean white report via native window.print()
+   (PrintButton → browser dialog → Print or Save as PDF). No library.
+
+   How it works: screen chrome disappears (nav/buttons), the dark
+   surfaces become paper, dark-theme text becomes ink — and the verdict
+   accents keep print-legible shades. Every selector below is an
+   attribute match on the literal Tailwind class, so the rules apply to
+   all four analyses without touching their components; all use
+   !important at equal specificity, so **source order decides**: neutrals
+   first, verdict accents last (they must also beat inline score colors). */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  /* Keep every surviving tint/badge/bar visible on paper. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* White paper with a normal document height (screen forces 100vh). */
+  html,
+  body,
+  #root {
+    background: #fff !important;
+    height: auto !important;
+    min-height: 0 !important;
+    color: #111827;
+  }
+
+  /* Screen chrome: Navbar (<nav>) and every action button — including
+     PrintButton itself and the CyberBtn reset/retry actions. */
+  nav,
+  button,
+  [data-no-print] {
+    display: none !important;
+  }
+
+  /* Layout resets: no viewport-height pages, no sticky side columns. */
+  [class*="min-h-screen"] {
+    min-height: 0 !important;
+  }
+  [class*="sticky"] {
+    position: static !important;
+  }
+
+  /* ── Dark surfaces → paper ──
+     `bg-[#13151F]` also matches its opacity variants (`/50`, `/80`).
+     `bg-[#1E2436]` is only used for wells/tracks, so it goes light gray
+     instead of white — score bars keep a visible track. */
+  [class*="bg-[#13151F]"],
+  [class*="bg-[#1A1E2D]"] {
+    background-color: #fff !important;
+  }
+  [class*="bg-[#1E2436]"] {
+    background-color: #f3f4f6 !important;
+  }
+
+  /* ── Dark-theme text → ink ── */
+  [class*="text-[#DDE1EC]"],
+  [class*="text-white"] {
+    color: #111827 !important;
+  }
+  [class*="text-[#8A92A6]"],
+  [class*="text-[#6B7280]"],
+  [class*="text-[#4B5563]"] {
+    color: #4b5563 !important;
+  }
+
+  /* Hairline card borders (brand-blue rgba + fingerprint cyan rgba) → gray. */
+  [class*="border-[rgba(91,137,212"],
+  [class*="border-[rgba(0,240,255"] {
+    border-color: #e5e7eb !important;
+  }
+
+  /* ── Verdict accents: darker, print-legible shades ──
+     Declared last so they win over the neutral text rules above and over
+     inline `style={{ color: … }}` score colors (!important beats inline). */
+  [class*="text-[#5B89D4]"] {
+    color: #1d4ed8 !important;
+  } /* brand blue */
+  [class*="text-[#10B981]"],
+  [class*="text-emerald-300"] {
+    color: #047857 !important;
+  } /* match */
+  [class*="text-[#F59E0B]"],
+  [class*="text-amber-400"] {
+    color: #b45309 !important;
+  } /* caution */
+  [class*="text-[#EF4444]"],
+  [class*="text-red-400"],
+  [class*="text-red-300"] {
+    color: #b91c1c !important;
+  } /* no match */
+
+  /* Cards/chips never split across pages; images fit the paper.
+     Multi-column grids collapse on their own: the print page is narrower
+     than the `lg:` breakpoint, so `lg:grid-cols-5` stacks to one column. */
+  [class*="rounded"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  img {
+    max-width: 100% !important;
+  }
+}

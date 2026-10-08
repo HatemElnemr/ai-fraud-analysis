@@ -53,10 +53,11 @@ export const SIGNATURE_ANALYSIS = {
     retryLabel: "Retry Comparison",
   },
   /**
-   * Metric labels the analysis is expected to report. They are appended to
-   * whatever the response actually returned (declared metrics, mark type,
-   * record label, any other scalar response field) as `—` placeholders for
-   * the measurements the function didn't report — never invented values.
+   * Metric labels this analysis expects the function to measure. They form
+   * the allowlist for measurements the response sends as top-level scalar
+   * fields (`penPressure`, `algorithm`, …). Every rendered tile carries a
+   * value the response actually returned: labels the response never
+   * reported are omitted from the grid, never shown empty.
    */
   fallbackMetrics: [
     "Stroke Consistency",

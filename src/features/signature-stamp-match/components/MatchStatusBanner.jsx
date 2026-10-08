@@ -65,7 +65,9 @@ export function MatchStatusBanner({
           className={`text-3xl sm:text-4xl font-bold tabular-nums ${variant.text}`}
           style={{ fontFamily: "monospace" }}
         >
-          {result.score === null ? "—" : `${result.score}%`}
+          {result.score === null || result.score === undefined
+            ? "N/A"
+            : `${result.score}%`}
         </div>
         <div className="text-[#4B5563] text-[9px] sm:text-[10px] uppercase tracking-wider">
           Match Score · threshold {result.threshold}%
