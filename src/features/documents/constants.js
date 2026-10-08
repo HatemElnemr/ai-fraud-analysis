@@ -21,3 +21,12 @@ export const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20 MB
 
 /** Route that runs a document comparison. */
 export const ANALYSIS_PATH = "/dashboard/document-analysis";
+
+/**
+ * Similarity below which a comparison counts as "no match found".
+ *
+ * Kept in step with `ResultScoreBanner`, where a score under 60 already
+ * renders as a failed integrity check — under this line the results screen
+ * shows `NoMatchState` instead of a closest record.
+ */
+export const MATCH_THRESHOLD = 60;
